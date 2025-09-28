@@ -1,7 +1,7 @@
 FROM ruby:3.2
 
 # Instalar dependências
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+RUN apt-get update -qq && apt-get install -y nodejs npm postgresql-client && npm install --global yarn
 
 # Criar diretório da aplicação
 WORKDIR /meu_app

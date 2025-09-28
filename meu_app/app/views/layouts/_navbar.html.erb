@@ -1,21 +1,29 @@
-<div>
+<nav class="fixed top-0 left-0 w-full bg-white border-b shadow-sm z-50">
+  <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+    <!-- Logo / Nome do App -->
+    <%= link_to "Meu App", root_path, class: "text-xl font-bold text-blue-600" %>
 
-    <% if admin_signed_in? %>
-        <%= current_admin.email %>
-    <% end%>
-    <ul>
-        <li>
-            <%= link_to "Home", root_path %>
-        </li>
-
-        <li>
-            <%= link_to "Post", posts_path %>
-        </li>
-
-        <li>
-            <%= link_to "Comment", comments_path %>
-        </li>
+    <!-- Links principais -->
+    <ul class="flex gap-6 items-center">
+      <li><%= link_to "Home", root_path, class: "text-gray-700 hover:text-blue-600" %></li>
+      <li><%= link_to "Posts", posts_path, class: "text-gray-700 hover:text-blue-600" %></li>
+      <li><%= link_to "Comments", comments_path, class: "text-gray-700 hover:text-blue-600" %></li>
     </ul>
 
-    <%= link_to "Deslogar", destroy_admin_session_path, method: :delete, data: { turbo_method: :delete } %>
-</div>
+    <!-- Sessão do usuário -->
+    <div class="flex items-center gap-4">
+      <% if admin_signed_in? %>
+        <span class="text-sm text-gray-600">
+          👤 <%= current_admin.email %>
+        </span>
+        <%= link_to "Sair", destroy_admin_session_path,
+              method: :delete,
+              data: { turbo_method: :delete, confirm: "Tem certeza que deseja sair?" },
+              class: "px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600" %>
+      <% else %>
+        <%= link_to "Entrar", new_admin_session_path,
+              class: "px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600" %>
+      <% end %>
+    </div>
+  </div>
+</nav>
