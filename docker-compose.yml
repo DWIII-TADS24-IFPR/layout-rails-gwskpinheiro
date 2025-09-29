@@ -1,19 +1,39 @@
+version: "3.9"
+
 services:
   db:
-    image: postgres:15
+    image: postgres:16
+    container_name: meu_app_db
     environment:
-      POSTGRES_PASSWORD: password
       POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: meu_app_development
     ports:
       - "5432:5432"
-  web:
-    build: .
-    container_name: meu_app
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
     volumes:
-    - "./meu_app:/meu_app"
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d meu_app_development"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: ./meu_app          # <- Dockerfile está dentro de meu_app
+    container_name: meu_app_web
+    working_dir: /meu_app         # <- combinando com o volume abaixo
+    command: bash -lc "rm -f tmp/pids/server.pid && bin/rails db:prepare && bin/rails s -b 0.0.0.0"
+    volumes:
+      - ./meu_app:/meu_app
     ports:
-    - "3000:3000"
+      - "3000:3000"
     depends_on:
-    - db
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:password@db:5432/meu_app_development
+      RAILS_ENV: development
+
+volumes:
+  pgdata:
