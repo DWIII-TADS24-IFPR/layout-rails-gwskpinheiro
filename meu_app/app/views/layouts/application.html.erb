@@ -19,11 +19,10 @@
   </head>
 
   <body class="bg-gray-50 min-h-screen flex flex-col">
-    <% if admin_signed_in? %>
-      <%= render "layouts/navbar" %>
-    <% end %>
+    <%= render "layouts/navbar" %>
 
     <main class="container mx-auto mt-24 px-5 flex-1">
+      <%= render "shared/flash" %>
       <%= yield %>
     </main>
 

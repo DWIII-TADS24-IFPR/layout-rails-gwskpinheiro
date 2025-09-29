@@ -49,3 +49,15 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# Node modules em qualquer lugar
+node_modules
+**/node_modules
+
+# Builds e assets
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
+# Cache e temporários
+log/*
+tmp/*

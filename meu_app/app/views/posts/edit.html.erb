@@ -1,12 +1,15 @@
-<% content_for :title, "Editing post" %>
+<% content_for :title, "Editar Post" %>
 
-<h1>Editing post</h1>
+<div class="mb-6 flex items-center justify-between">
+  <h1 class="text-2xl font-bold">Editar Post</h1>
+  <div class="flex gap-3">
+    <%= link_to "Ver", @post, class: "btn-secondary" %>
+    <%= link_to "Voltar", posts_path, class: "btn-secondary" %>
+  </div>
+</div>
 
-<%= render "form", post: @post %>
-
-<br>
-
-<div>
-  <%= link_to "Show this post", @post %> |
-  <%= link_to "Back to posts", posts_path %>
+<div class="card">
+  <div class="card-body">
+    <%= render "form", post: @post %>
+  </div>
 </div>

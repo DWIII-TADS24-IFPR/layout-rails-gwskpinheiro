@@ -1,27 +1,32 @@
-<%= form_with(model: post) do |form| %>
+<%= form_with(model: post, class: "space-y-6") do |f| %>
   <% if post.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
-
-      <ul>
-        <% post.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+    <div class="alert-err">
+      <p><strong><%= pluralize(post.errors.count, "erro") %></strong> impediram o salvamento:</p>
+      <ul class="list-disc pl-6 mt-2">
+        <% post.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
   <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+    <%= f.label :title, "Título", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :title, class: "mt-1 block w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500" %>
   </div>
 
   <div>
-    <%= form.label :content, style: "display: block" %>
-    <%= form.textarea :content %>
+    <%= f.label :body, "Conteúdo", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_area :body, rows: 8, class: "mt-1 block w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="flex items-center gap-3">
+    <%= f.check_box :published, class: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+    <%= f.label :published, "Publicado", class: "text-sm text-gray-700" %>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= f.submit class: "btn-primary" %>
+    <%= link_to "Cancelar", posts_path, class: "btn-secondary" %>
   </div>
 <% end %>

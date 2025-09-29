@@ -1,19 +1,60 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, @post.title %>
 
-<%= render @post %>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <!-- Coluna principal -->
+  <div class="lg:col-span-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="flex items-start justify-between gap-4">
+          <h1 class="text-2xl font-bold"><%= @post.title %></h1>
+          <% if @post.published? %>
+            <span class="badge-green">Publicado</span>
+          <% else %>
+            <span class="badge-gray">Rascunho</span>
+          <% end %>
+        </div>
 
-<div>
-  <%= link_to "Edit this post", edit_post_path(@post) %> |
-  <%= link_to "Back to posts", posts_path %>
+        <div class="mt-4 prose max-w-none">
+          <%= simple_format @post.body %>
+        </div>
 
+        <div class="mt-6 flex flex-wrap gap-3">
+          <%= link_to "Editar", edit_post_path(@post), class: "btn-secondary" %>
+          <%= button_to "Excluir", @post, method: :delete, form: { data: { turbo_confirm: "Tem certeza?" } }, class: "btn-danger" %>
+          <%= link_to "Voltar", posts_path, class: "btn-link" %>
+        </div>
+      </div>
+    </div>
 
-  <h2>Comments</h2>
+    <!-- Comments -->
+    <div class="mt-8 card">
+      <div class="card-body">
+        <h2 class="text-lg font-semibold">Comentários</h2>
+        <ul class="mt-4 space-y-3">
+          <% @post.comments.each do |comment| %>
+            <li class="border rounded-lg px-4 py-3 bg-white">
+              <p class="text-gray-700"><%= comment.content %></p>
+            </li>
+          <% end %>
+          <% if @post.comments.blank? %>
+            <li class="text-gray-500">Sem comentários ainda.</li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-  <ul>
-    <% @post.comments.each do |comment |  %>
-      <li><%= comment.content %></li>
-    <% end %>
-  </ul>
-
-  <%= button_to "Destroy this post", @post, method: :delete %>
+  <!-- Sidebar -->
+  <aside class="space-y-4">
+    <div class="card">
+      <div class="card-body text-sm text-gray-600">
+        <div><span class="font-medium">Criado em:</span> <%= l @post.created_at, format: :short %></div>
+        <div><span class="font-medium">Atualizado:</span> <%= l @post.updated_at, format: :short %></div>
+        <div class="mt-2">
+          <span class="font-medium">Status:</span>
+          <%= @post.published? ? "Publicado" : "Rascunho" %>
+        </div>
+      </div>
+    </div>
+  </aside>
 </div>

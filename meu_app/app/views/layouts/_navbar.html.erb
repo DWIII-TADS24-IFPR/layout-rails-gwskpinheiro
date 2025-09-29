@@ -3,27 +3,54 @@
     <!-- Logo / Nome do App -->
     <%= link_to "Meu App", root_path, class: "text-xl font-bold text-blue-600" %>
 
+    <!-- Botão mobile -->
+    <button
+      class="md:hidden inline-flex items-center rounded-lg border px-3 py-2 text-gray-600 hover:bg-gray-50"
+      data-controller="menu" data-action="click->menu#toggle" aria-label="Abrir menu">
+      ☰
+    </button>
+
     <!-- Links principais -->
-    <ul class="flex gap-6 items-center">
-      <li><%= link_to "Home", root_path, class: "text-gray-700 hover:text-blue-600" %></li>
-      <li><%= link_to "Posts", posts_path, class: "text-gray-700 hover:text-blue-600" %></li>
-      <li><%= link_to "Comments", comments_path, class: "text-gray-700 hover:text-blue-600" %></li>
+    <ul class="hidden md:flex gap-6 items-center">
+      <li><%= link_to "Home", root_path,
+          class: "hover:text-blue-600 #{current_page?(root_path) ? 'text-blue-600 font-medium' : 'text-gray-700'}" %></li>
+      <li><%= link_to "Posts", posts_path,
+          class: "hover:text-blue-600 #{current_page?(posts_path) ? 'text-blue-600 font-medium' : 'text-gray-700'}" %></li>
+      <li><%= link_to "Comments", comments_path,
+          class: "hover:text-blue-600 #{current_page?(comments_path) ? 'text-blue-600 font-medium' : 'text-gray-700'}" %></li>
     </ul>
 
     <!-- Sessão do usuário -->
-    <div class="flex items-center gap-4">
+    <div class="hidden md:flex items-center gap-4">
       <% if admin_signed_in? %>
-        <span class="text-sm text-gray-600">
-          👤 <%= current_admin.email %>
-        </span>
+        <span class="text-sm text-gray-600">👤 <%= current_admin.email %></span>
         <%= link_to "Sair", destroy_admin_session_path,
               method: :delete,
               data: { turbo_method: :delete, confirm: "Tem certeza que deseja sair?" },
-              class: "px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600" %>
+              class: "btn-danger" %>
       <% else %>
-        <%= link_to "Entrar", new_admin_session_path,
-              class: "px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600" %>
+        <%= link_to "Entrar", new_admin_session_path, class: "btn-primary" %>
       <% end %>
+    </div>
+  </div>
+
+  <!-- Menu mobile -->
+  <div class="md:hidden border-t" data-menu-target="panel" hidden>
+    <div class="container mx-auto px-6 py-3 space-y-3">
+      <%= link_to "Home", root_path, class: "block text-gray-700 hover:text-blue-600" %>
+      <%= link_to "Posts", posts_path, class: "block text-gray-700 hover:text-blue-600" %>
+      <%= link_to "Comments", comments_path, class: "block text-gray-700 hover:text-blue-600" %>
+
+      <div class="pt-3 border-t">
+        <% if admin_signed_in? %>
+          <div class="text-sm text-gray-600 mb-2">👤 <%= current_admin.email %></div>
+          <%= link_to "Sair", destroy_admin_session_path, method: :delete,
+                data: { turbo_method: :delete, confirm: "Tem certeza que deseja sair?" },
+                class: "btn-danger w-full text-center" %>
+        <% else %>
+          <%= link_to "Entrar", new_admin_session_path, class: "btn-primary w-full text-center" %>
+        <% end %>
+      </div>
     </div>
   </div>
 </nav>
